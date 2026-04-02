@@ -4,31 +4,77 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ChatAPC Daily Sprint Report — Thursday, April 2, 2026</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+  <style>    * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: #f0f2f5; color: #1a1a2e; padding: 32px; }
     .container { max-width: 1400px; margin: 0 auto; }
     header { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); color: #fff; padding: 28px 36px; border-radius: 12px; margin-bottom: 28px; display: flex; justify-content: space-between; align-items: center; }
     header h1 { font-size: 22px; font-weight: 600; }
     header .date { font-size: 14px; opacity: 0.8; }
     header .subtitle { font-size: 13px; opacity: 0.6; margin-top: 4px; }
+    .tabs { display: flex; gap: 0; margin-bottom: 24px; background: #fff; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); overflow: hidden; }
+    .tab-btn { flex: 1; padding: 14px 24px; font-size: 13px; font-weight: 600; text-align: center; cursor: pointer; border: none; background: #fff; color: #6b7280; transition: all 0.2s; border-bottom: 3px solid transparent; }
+    .tab-btn:hover { background: #f9fafb; color: #374151; }
+    .tab-btn.active { color: #2563eb; border-bottom-color: #2563eb; background: #eff6ff; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
     .summary-bar { display: flex; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
     .summary-card { background: #fff; border-radius: 10px; padding: 18px 24px; flex: 1; min-width: 140px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); text-align: center; }
     .summary-card .number { font-size: 28px; font-weight: 700; }
     .summary-card .label { font-size: 12px; color: #666; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
-    table { width: 100%; border-collapse: collapse; margin-bottom: 24px; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
-    th { background: #f3f4f6; padding: 12px 16px; text-align: left; font-weight: 600; font-size: 12px; color: #374151; border-bottom: 1px solid #e5e7eb; text-transform: uppercase; letter-spacing: 0.5px; }
-    td { padding: 12px 16px; border-bottom: 1px solid #e5e7eb; }
-    tr:last-child td { border-bottom: none; }
-    .status-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; text-transform: uppercase; }
-    .status-todo { background: #dbeafe; color: #1e40af; }
-    .status-ready { background: #dcfce7; color: #166534; }
-    .status-in-progress { background: #fef08a; color: #713f12; }
-    .status-in-review { background: #fed7aa; color: #92400e; }
-    .status-done { background: #bbf7d0; color: #065f46; }
-    .dev-link { color: #2563eb; text-decoration: none; }
-    .dev-link:hover { text-decoration: underline; }
-    .report-footer { text-align: center; padding: 20px; color: #666; font-size: 12px; margin-top: 40px; }
+    .dev-cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
+    .dev-card { background: #fff; border-radius: 10px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); border-left: 4px solid #2563eb; }
+    .dev-card.hidden-card { display: none; }
+    .dev-name { font-size: 15px; font-weight: 700; color: #1a1a2e; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .dev-name .avatar { width: 28px; height: 28px; border-radius: 50%; background: #e5e7eb; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: #666; }
+    .dev-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 12px; padding: 10px 0; border-top: 1px solid #e5e7eb; border-bottom: 1px solid #e5e7eb; }
+    .stat { text-align: center; }
+    .stat .value { font-size: 18px; font-weight: 700; color: #2563eb; }
+    .stat .label { font-size: 11px; color: #999; text-transform: uppercase; margin-top: 2px; }
+    .activity-item { margin: 8px 0; padding: 8px; background: #f9fafb; border-left: 3px solid #d1d5db; padding-left: 12px; border-radius: 2px; font-size: 13px; }
+    .activity-item.completed { color: #059669; border-left-color: #059669; }
+    .activity-item.in-progress { color: #d97706; border-left-color: #d97706; }
+    .activity-item.todo { color: #6b7280; border-left-color: #9ca3af; }
+    .activity-item.review { color: #2563eb; border-left-color: #2563eb; }
+    .filters { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+    .filter-btn { padding: 8px 14px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 12px; cursor: pointer; transition: all 0.2s; background: #fff; color: #666; }
+    .filter-btn:hover { border-color: #2563eb; color: #2563eb; background: #eff6ff; }
+    .filter-btn.active { border-color: #2563eb; color: #fff; background: #2563eb; }
+    .status-badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; text-transform: uppercase; }
+    .status-badge.completed { background: #d1fae5; color: #059669; }
+    .status-badge.in-progress { background: #fef3c7; color: #d97706; }
+    .status-badge.todo { background: #f3f4f6; color: #6b7280; }
+    .status-badge.review { background: #dbeafe; color: #2563eb; }
+    .repo-section { margin-bottom: 24px; }
+    .repo-title { font-size: 14px; font-weight: 700; color: #1a1a2e; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .repo-title .repo-badge { background: #f3f4f6; padding: 4px 10px; border-radius: 4px; font-size: 11px; color: #666; }
+    .commit-list { display: flex; flex-direction: column; gap: 8px; }
+    .commit-item { padding: 10px; background: #f9fafb; border-radius: 6px; border-left: 3px solid #e5e7eb; font-size: 12px; }
+    .commit-item.fix { border-left-color: #ef4444; }
+    .commit-item.feat { border-left-color: #3b82f6; }
+    .commit-item.refactor { border-left-color: #8b5cf6; }
+    .commit-item.test { border-left-color: #10b981; }
+    .commit-item .commit-hash { color: #999; font-family: monospace; font-size: 11px; }
+    .commit-item .commit-message { font-weight: 500; color: #1a1a2e; margin-top: 2px; }
+    .commit-item .commit-author { color: #999; font-size: 11px; margin-top: 2px; }
+    .sprint-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 16px; }
+    .sprint-header h2 { font-size: 16px; font-weight: 700; }
+    .sprint-header .sprint-dates { font-size: 12px; color: #999; }
+    .ticket-list { display: flex; flex-direction: column; gap: 8px; }
+    .ticket-item { padding: 12px; background: #f9fafb; border-radius: 6px; border-left: 4px solid #e5e7eb; font-size: 12px; display: flex; justify-content: space-between; align-items: center; }
+    .ticket-item.done { border-left-color: #059669; }
+    .ticket-item.in-review { border-left-color: #2563eb; }
+    .ticket-item.in-progress { border-left-color: #d97706; }
+    .ticket-item.ready { border-left-color: #9ca3af; }
+    .ticket-item .ticket-key { font-weight: 600; color: #2563eb; font-family: monospace; }
+    .ticket-item .ticket-title { color: #1a1a2e; flex: 1; margin-left: 12px; }
+    .ticket-item .ticket-assignee { color: #999; font-size: 11px; }
+    .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e7eb; text-align: center; font-size: 12px; color: #999; }
+    @media (max-width: 768px) {
+      .dev-cards-grid { grid-template-columns: 1fr; }
+      header { flex-direction: column; align-items: flex-start; }
+      .summary-bar { gap: 12px; }
+      .dev-stats { grid-template-columns: repeat(3, 1fr); }
+    }
   </style>
 </head>
 <body>
@@ -37,157 +83,366 @@
     <div>
       <h1>ChatAPC Daily Sprint Report</h1>
       <div class="date">Thursday, April 2, 2026</div>
-      <div class="subtitle">Development Status & Ticket Overview</div>
+      <div class="subtitle">Development team activity snapshot</div>
+    </div>
+    <div style="text-align: right;">
+      <div style="font-size: 28px; font-weight: 700; color: #4ade80;">Ready</div>
+      <div style="font-size: 13px; opacity: 0.8;">Sprint Status</div>
     </div>
   </header>
 
-  <div class="summary-bar">
-    <div class="summary-card">
-      <div class="number" style="color: #6b7280;">3</div>
-      <div class="label">Todo</div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab(event, 'dev-activity')">Dev Activity</button>
+    <button class="tab-btn" onclick="switchTab(event, 'sprint-board')">Sprint Board</button>
+    <button class="tab-btn" onclick="switchTab(event, 'jira-summary')">Jira Summary</button>
+  </div>
+
+  <div id="dev-activity" class="tab-content active">
+    <div class="summary-bar">
+      <div class="summary-card">
+        <div class="number">7</div>
+        <div class="label">Team Members</div>
+      </div>
+      <div class="summary-card">
+        <div class="number">0</div>
+        <div class="label">Commits Today</div>
+      </div>
+      <div class="summary-card">
+        <div class="number">0</div>
+        <div class="label">In Progress</div>
+      </div>
+      <div class="summary-card">
+        <div class="number">0</div>
+        <div class="label">PRs Opened</div>
+      </div>
+      <div class="summary-card">
+        <div class="number">0</div>
+        <div class="label">PRs Merged</div>
+      </div>
     </div>
-    <div class="summary-card">
-      <div class="number" style="color: #059669;">2</div>
-      <div class="label">Ready</div>
+
+    <div style="margin-bottom: 20px;">
+      <h3 style="margin-bottom: 12px; font-size: 14px; font-weight: 700;">Filter by Developer</h3>
+      <div class="filters">
+        <button class="filter-btn active" onclick="filterDev(event, null)">All Developers</button>
+        <button class="filter-btn" onclick="filterDev(event, 'Hamzahwy')">Hamzahwy</button>
+        <button class="filter-btn" onclick="filterDev(event, 'Momo')">Momo</button>
+        <button class="filter-btn" onclick="filterDev(event, 'Matteo')">Matteo</button>
+        <button class="filter-btn" onclick="filterDev(event, 'Giuseppe')">Giuseppe</button>
+        <button class="filter-btn" onclick="filterDev(event, 'Filippo')">Filippo</button>
+        <button class="filter-btn" onclick="filterDev(event, 'Luca')">Luca</button>
+        <button class="filter-btn" onclick="filterDev(event, 'Marco')">Marco</button>
+      </div>
     </div>
-    <div class="summary-card">
-      <div class="number" style="color: #d97706;">4</div>
-      <div class="label">In Progress</div>
-    </div>
-    <div class="summary-card">
-      <div class="number" style="color: #ea580c;">1</div>
-      <div class="label">In Review</div>
-    </div>
-    <div class="summary-card">
-      <div class="number" style="color: #16a34a;">12</div>
-      <div class="label">Done</div>
+
+    <div class="dev-cards-grid">
+      <div class="dev-card" data-dev-card="Hamzahwy">
+        <div class="dev-name">
+          <div class="avatar">H</div>
+          <span>Hamzahwy</span>
+        </div>
+        <div class="dev-stats">
+          <div class="stat">
+            <div class="value">0</div>
+            <div class="label">Commits</div>
+          </div>
+          <div class="stat">
+            <div class="value">0</div>
+            <div class="label">PRs</div>
+          </div>
+          <div class="stat">
+            <div class="value">0</div>
+            <div class="label">Issues</div>
+          </div>
+        </div>
+        <div style="font-size: 12px; color: #999; padding: 8px 0;">Last activity: <strong>Not today</strong></div>
+        <div style="padding: 8px 0; border-top: 1px solid #e5e7eb; margin-top: 8px;">
+          <div style="font-size: 12px; font-weight: 600; color: #1a1a2e; margin-bottom: 8px;">Recent Commits</div>
+          <div class="commit-list" style="margin-bottom: 8px;">
+            <div style="padding: 8px; background: #f3f4f6; border-radius: 4px; font-size: 11px; color: #666;">No commits today</div>
+          </div>
+          <div style="font-size: 12px; font-weight: 600; color: #1a1a2e; margin-bottom: 8px; margin-top: 8px;">Recent Issues</div>
+          <div class="ticket-list">
+            <div style="padding: 8px; background: #f3f4f6; border-radius: 4px; font-size: 11px; color: #666;">No activity</div>
+          </div>
+        </div>
+      </div>
+      <div class="dev-card" data-dev-card="Momo">
+        <div class="dev-name">
+          <div class="avatar">M</div>
+          <span>Momo</span>
+        </div>
+        <div class="dev-stats">
+          <div class="stat">
+            <div class="value">0</div>
+            <div class="label">Commits</div>
+          </div>
+          <div class="stat">
+            <div class="value">0</div>
+            <div class="label">PRs</div>
+          </div>
+          <div class="stat">
+            <div class="value">0</div>
+            <div class="label">Issues</div>
+          </div>
+        </div>
+        <div style="font-size: 12px; color: #999; padding: 8px 0;">Last activity: <strong>Not today</strong></div>
+        <div style="padding: 8px 0; border-top: 1px solid #e5e7eb; margin-top: 8px;">
+          <div style="font-size: 12px; font-weight: 600; color: #1a1a2e; margin-bottom: 8px;">Recent Commits</div>
+          <div class="commit-list" style="margin-bottom: 8px;">
+            <div style="padding: 8px; background: #f3f4f6; border-radius: 4px; font-size: 11px; color: #666;">No commits today</div>
+          </div>
+          <div style="font-size: 12px; font-weight: 600; color: #1a1a2e; margin-bottom: 8px; margin-top: 8px;">Recent Issues</div>
+          <div class="ticket-list">
+            <div style="padding: 8px; background: #f3f4f6; border-radius: 4px; font-size: 11px; color: #666;">No activity</div>
+          </div>
+        </div>
+      </div>
+      <div class="dev-card" data-dev-card="Matteo">
+        <div class="dev-name">
+          <div class="avatar">M</div>
+          <span>Matteo</span>
+        </div>
+        <div class="dev-stats">
+          <div class="stat">
+            <div class="value">0</div>
+            <div class="label">Commits</div>
+          </div>
+          <div class="stat">
+            <div class="value">0</div>
+            <div class="label">PRs</div>
+          </div>
+          <div class="stat">
+            <div class="value">0</div>
+            <div class="label">Issues</div>
+          </div>
+        </div>
+        <div style="font-size: 12px; color: #999; padding: 8px 0;">Last activity: <strong>Not today</strong></div>
+        <div style="padding: 8px 0; border-top: 1px solid #e5e7eb; margin-top: 8px;">
+          <div style="font-size: 12px; font-weight: 600; color: #1a1a2e; margin-bottom: 8px;">Recent Commits</div>
+          <div class="commit-list" style="margin-bottom: 8px;">
+            <div style="padding: 8px; background: #f3f4f6; border-radius: 4px; font-size: 11px; color: #666;">No commits today</div>
+          </div>
+          <div style="font-size: 12px; font-weight: 600; color: #1a1a2e; margin-bottom: 8px; margin-top: 8px;">Recent Issues</div>
+          <div class="ticket-list">
+            <div style="padding: 8px; background: #f3f4f6; border-radius: 4px; font-size: 11px; color: #666;">No activity</div>
+          </div>
+        </div>
+      </div>
+      <div class="dev-card" data-dev-card="Giuseppe">
+        <div class="dev-name">
+          <div class="avatar">G</div>
+          <span>Giuseppe</span>
+        </div>
+        <div class="dev-stats">
+          <div class="stat">
+            <div class="value">0</div>
+            <div class="label">Commits</div>
+          </div>
+          <div class="stat">
+            <div class="value">0</div>
+            <div class="label">PRs</div>
+          </div>
+          <div class="stat">
+            <div class="value">0</div>
+            <div class="label">Issues</div>
+          </div>
+        </div>
+        <div style="font-size: 12px; color: #999; padding: 8px 0;">Last activity: <strong>Not today</strong></div>
+        <div style="padding: 8px 0; border-top: 1px solid #e5e7eb; margin-top: 8px;">
+          <div style="font-size: 12px; font-weight: 600; color: #1a1a2e; margin-bottom: 8px;">Recent Commits</div>
+          <div class="commit-list" style="margin-bottom: 8px;">
+            <div style="padding: 8px; background: #f3f4f6; border-radius: 4px; font-size: 11px; color: #666;">No commits today</div>
+          </div>
+          <div style="font-size: 12px; font-weight: 600; color: #1a1a2e; margin-bottom: 8px; margin-top: 8px;">Recent Issues</div>
+          <div class="ticket-list">
+            <div style="padding: 8px; background: #f3f4f6; border-radius: 4px; font-size: 11px; color: #666;">No activity</div>
+          </div>
+        </div>
+      </div>
+      <div class="dev-card" data-dev-card="Filippo">
+        <div class="dev-name">
+          <div class="avatar">F</div>
+          <span>Filippo</span>
+        </div>
+        <div class="dev-stats">
+          <div class="stat">
+            <div class="value">0</div>
+            <div class="label">Commits</div>
+          </div>
+          <div class="stat">
+            <div class="value">0</div>
+            <div class="label">PRs</div>
+          </div>
+          <div class="stat">
+            <div class="value">0</div>
+            <div class="label">Issues</div>
+          </div>
+        </div>
+        <div style="font-size: 12px; color: #999; padding: 8px 0;">Last activity: <strong>Not today</strong></div>
+        <div style="padding: 8px 0; border-top: 1px solid #e5e7eb; margin-top: 8px;">
+          <div style="font-size: 12px; font-weight: 600; color: #1a1a2e; margin-bottom: 8px;">Recent Commits</div>
+          <div class="commit-list" style="margin-bottom: 8px;">
+            <div style="padding: 8px; background: #f3f4f6; border-radius: 4px; font-size: 11px; color: #666;">No commits today</div>
+          </div>
+          <div style="font-size: 12px; font-weight: 600; color: #1a1a2e; margin-bottom: 8px; margin-top: 8px;">Recent Issues</div>
+          <div class="ticket-list">
+            <div style="padding: 8px; background: #f3f4f6; border-radius: 4px; font-size: 11px; color: #666;">No activity</div>
+          </div>
+        </div>
+      </div>
+      <div class="dev-card" data-dev-card="Luca">
+        <div class="dev-name">
+          <div class="avatar">L</div>
+          <span>Luca</span>
+        </div>
+        <div class="dev-stats">
+          <div class="stat">
+            <div class="value">0</div>
+            <div class="label">Commits</div>
+          </div>
+          <div class="stat">
+            <div class="value">0</div>
+            <div class="label">PRs</div>
+          </div>
+          <div class="stat">
+            <div class="value">0</div>
+            <div class="label">Issues</div>
+          </div>
+        </div>
+        <div style="font-size: 12px; color: #999; padding: 8px 0;">Last activity: <strong>Not today</strong></div>
+        <div style="padding: 8px 0; border-top: 1px solid #e5e7eb; margin-top: 8px;">
+          <div style="font-size: 12px; font-weight: 600; color: #1a1a2e; margin-bottom: 8px;">Recent Commits</div>
+          <div class="commit-list" style="margin-bottom: 8px;">
+            <div style="padding: 8px; background: #f3f4f6; border-radius: 4px; font-size: 11px; color: #666;">No commits today</div>
+          </div>
+          <div style="font-size: 12px; font-weight: 600; color: #1a1a2e; margin-bottom: 8px; margin-top: 8px;">Recent Issues</div>
+          <div class="ticket-list">
+            <div style="padding: 8px; background: #f3f4f6; border-radius: 4px; font-size: 11px; color: #666;">No activity</div>
+          </div>
+        </div>
+      </div>
+      <div class="dev-card" data-dev-card="Marco">
+        <div class="dev-name">
+          <div class="avatar">M</div>
+          <span>Marco</span>
+        </div>
+        <div class="dev-stats">
+          <div class="stat">
+            <div class="value">0</div>
+            <div class="label">Commits</div>
+          </div>
+          <div class="stat">
+            <div class="value">0</div>
+            <div class="label">PRs</div>
+          </div>
+          <div class="stat">
+            <div class="value">0</div>
+            <div class="label">Issues</div>
+          </div>
+        </div>
+        <div style="font-size: 12px; color: #999; padding: 8px 0;">Last activity: <strong>Not today</strong></div>
+        <div style="padding: 8px 0; border-top: 1px solid #e5e7eb; margin-top: 8px;">
+          <div style="font-size: 12px; font-weight: 600; color: #1a1a2e; margin-bottom: 8px;">Recent Commits</div>
+          <div class="commit-list" style="margin-bottom: 8px;">
+            <div style="padding: 8px; background: #f3f4f6; border-radius: 4px; font-size: 11px; color: #666;">No commits today</div>
+          </div>
+          <div style="font-size: 12px; font-weight: 600; color: #1a1a2e; margin-bottom: 8px; margin-top: 8px;">Recent Issues</div>
+          <div class="ticket-list">
+            <div style="padding: 8px; background: #f3f4f6; border-radius: 4px; font-size: 11px; color: #666;">No activity</div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <h2 style="margin-top: 32px; margin-bottom: 16px; color: #1a1a2e;">Recent Sprint Summary</h2>
-  <p style="margin-bottom: 20px; color: #6b7280;">Overview of active development across all teams for the week of April 2, 2026.</p>
+  <div id="sprint-board" class="tab-content">
+    <div class="sprint-header">
+      <h2>Current Sprint</h2>
+      <div class="sprint-dates">No active sprint</div>
+    </div>
+    <div style="padding: 20px; background: #f9fafb; border-radius: 10px; text-align: center; color: #999;">
+      No sprint board data available
+    </div>
+  </div>
 
-  <table>
-    <thead>
-      <tr>
-        <th>Ticket</th>
-        <th>Summary</th>
-        <th>Assignee</th>
-        <th>Status</th>
-        <th>Progress</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>CA-1091</td>
-        <td>Source Code Protection & Docker Image Hardening</td>
-        <td><a href="#" class="dev-link">Marco</a></td>
-        <td><span class="status-badge status-done">Done</span></td>
-        <td>100%</td>
-      </tr>
-      <tr>
-        <td>CA-1092</td>
-        <td>License Management System</td>
-        <td><a href="#" class="dev-link">Momo</a></td>
-        <td><span class="status-badge status-done">Done</span></td>
-        <td>100%</td>
-      </tr>
-      <tr>
-        <td>CA-1101</td>
-        <td>License Module Implementation</td>
-        <td><a href="#" class="dev-link">Marco</a></td>
-        <td><span class="status-badge status-done">Done</span></td>
-        <td>100%</td>
-      </tr>
-      <tr>
-        <td>CA-1102</td>
-        <td>Key Generator CLI Tool</td>
-        <td><a href="#" class="dev-link">Marco</a></td>
-        <td><span class="status-badge status-done">Done</span></td>
-        <td>100%</td>
-      </tr>
-      <tr>
-        <td>CA-1105</td>
-        <td>Unit Testing & Documentation</td>
-        <td><a href="#" class="dev-link">Marco</a></td>
-        <td><span class="status-badge status-done">Done</span></td>
-        <td>100%</td>
-      </tr>
-      <tr>
-        <td>CA-1182</td>
-        <td>Fallback LLM Hallucination</td>
-        <td><a href="#" class="dev-link">Matteo</a></td>
-        <td><span class="status-badge status-done">Done</span></td>
-        <td>100%</td>
-      </tr>
-      <tr>
-        <td>CA-292</td>
-        <td>Message History Pagination</td>
-        <td><a href="#" class="dev-link">Luca</a></td>
-        <td><span class="status-badge status-done">Done</span></td>
-        <td>100%</td>
-      </tr>
-      <tr>
-        <td>CA-303</td>
-        <td>Chat Experience Improvements</td>
-        <td><a href="#" class="dev-link">Luca</a></td>
-        <td><span class="status-badge status-done">Done</span></td>
-        <td>100%</td>
-      </tr>
-      <tr>
-        <td>CA-376</td>
-        <td>Performance Optimization Large Datasets</td>
-        <td><a href="#" class="dev-link">Luca</a></td>
-        <td><span class="status-badge status-in-progress">In Progress</span></td>
-        <td>75%</td>
-      </tr>
-      <tr>
-        <td>CA-391</td>
-        <td>Performance Monitoring Tools</td>
-        <td><a href="#" class="dev-link">Luca</a></td>
-        <td><span class="status-badge status-in-progress">In Progress</span></td>
-        <td>80%</td>
-      </tr>
-      <tr>
-        <td>CA-392</td>
-        <td>Data Decimation Integration</td>
-        <td><a href="#" class="dev-link">Luca</a></td>
-        <td><span class="status-badge status-in-progress">In Progress</span></td>
-        <td>70%</td>
-      </tr>
-      <tr>
-        <td>CA-393</td>
-        <td>DataPyramid Implementation</td>
-        <td><a href="#" class="dev-link">Luca</a></td>
-        <td><span class="status-badge status-in-progress">In Progress</span></td>
-        <td>85%</td>
-      </tr>
-    </tbody>
-  </table>
+  <div id="jira-summary" class="tab-content">
+    <div class="sprint-header">
+      <h2>Jira Board Summary</h2>
+      <div class="sprint-dates">Last 30 days</div>
+    </div>
+    <div class="repo-section">
+      <div class="repo-title">
+        <span>Todo</span>
+        <div class="repo-badge">0 issues</div>
+      </div>
+      <div class="ticket-list">
+        <div style="padding: 8px; background: #f3f4f6; border-radius: 4px; font-size: 11px; color: #666;">No Todo tickets</div>
+      </div>
+    </div>
+    <div class="repo-section">
+      <div class="repo-title">
+        <span>Ready</span>
+        <div class="repo-badge">0 issues</div>
+      </div>
+      <div class="ticket-list">
+        <div style="padding: 8px; background: #f3f4f6; border-radius: 4px; font-size: 11px; color: #666;">No Ready tickets</div>
+      </div>
+    </div>
+    <div class="repo-section">
+      <div class="repo-title">
+        <span>In Progress</span>
+        <div class="repo-badge">0 issues</div>
+      </div>
+      <div class="ticket-list">
+        <div style="padding: 8px; background: #f3f4f6; border-radius: 4px; font-size: 11px; color: #666;">No In Progress tickets</div>
+      </div>
+    </div>
+    <div class="repo-section">
+      <div class="repo-title">
+        <span>In Review</span>
+        <div class="repo-badge">0 issues</div>
+      </div>
+      <div class="ticket-list">
+        <div style="padding: 8px; background: #f3f4f6; border-radius: 4px; font-size: 11px; color: #666;">No In Review tickets</div>
+      </div>
+    </div>
+    <div class="repo-section">
+      <div class="repo-title">
+        <span>Done</span>
+        <div class="repo-badge">0 issues</div>
+      </div>
+      <div class="ticket-list">
+        <div style="padding: 8px; background: #f3f4f6; border-radius: 4px; font-size: 11px; color: #666;">No Done tickets</div>
+      </div>
+    </div>
+  </div>
 
-  <h2 style="margin-top: 32px; margin-bottom: 16px; color: #1a1a2e;">Team Activity</h2>
-  
-  <h3 style="margin-top: 24px; margin-bottom: 12px; color: #374151; font-size: 16px;">Commits: 52 total</h3>
-  <p style="margin-bottom: 16px; color: #6b7280; font-size: 14px;">
-    Marco: 24 commits | Momo: 6 commits | Luca: 15 commits | Mohamed: 5 commits | Matteo: 1 commit | Filippo P: 1 commit | Giuseppe: 0 commits
-  </p>
-
-  <h3 style="margin-top: 24px; margin-bottom: 12px; color: #374151; font-size: 16px;">Pull Requests: 10 merged, 2 open</h3>
-  <p style="margin-bottom: 16px; color: #6b7280; font-size: 14px;">
-    All major features passing code review and integration testing. Some PRs pending design sign-off from Sabrina.
-  </p>
-
-  <h3 style="margin-top: 24px; margin-bottom: 12px; color: #374151; font-size: 16px;">Blockers & Notes</h3>
-  <ul style="margin-bottom: 16px; color: #6b7280; padding-left: 20px;">
-    <li>Giuseppe: No activity past Mar 27 — may be on research or non-code tasks</li>
-    <li>Mohamed (Hamzahwy): Two PRs awaiting review in admin-panel (Tag hierarchy, Bulk import)</li>
-    <li>Performance optimization suite (CA-391, CA-392, CA-393) on track for merge</li>
-    <li>All licensing and security features completed ahead of schedule</li>
-  </ul>
-
-  <div class="report-footer">
-    Generated 2026-04-02 | ChatAPC Development Team
+  <div class="footer">
+    <p>Report generated on 2026-04-02 — Powered by ChatAPC Analytics</p>
   </div>
 </div>
+
+<script>
+function switchTab(event, tabName) {
+  const tabs = document.querySelectorAll('.tab-content');
+  const buttons = document.querySelectorAll('.tab-btn');
+  tabs.forEach(tab => tab.classList.remove('active'));
+  buttons.forEach(btn => btn.classList.remove('active'));
+  document.getElementById(tabName).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function filterDev(event, dev) {
+  const buttons = document.querySelectorAll('.filter-btn');
+  buttons.forEach(btn => btn.classList.remove('active'));
+  event.target.classList.add('active');
+  const cards = document.querySelectorAll('.dev-card');
+  cards.forEach(card => {
+    if (!dev || card.getAttribute('data-dev-card') === dev) card.classList.remove('hidden-card');
+    else card.classList.add('hidden-card');
+  });
+}
+</script>
 </body>
 </html>
