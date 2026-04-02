@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChatAPC Daily Sprint Report — Thursday, April 2, 2026</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: #f0f2f5; color: #1a1a2e; padding: 32px; }
+    .container { max-width: 1400px; margin: 0 auto; }
+    header { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); color: #fff; padding: 28px 36px; border-radius: 12px; margin-bottom: 28px; display: flex; justify-content: space-between; align-items: center; }
+    header h1 { font-size: 22px; font-weight: 600; }
+    header .date { font-size: 14px; opacity: 0.8; }
+    header .subtitle { font-size: 13px; opacity: 0.6; margin-top: 4px; }
+    .summary-bar { display: flex; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+    .summary-card { background: #fff; border-radius: 10px; padding: 18px 24px; flex: 1; min-width: 140px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); text-align: center; }
+    .summary-card .number { font-size: 28px; font-weight: 700; }
+    .summary-card .label { font-size: 12px; color: #666; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 24px; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+    th { background: #f3f4f6; padding: 12px 16px; text-align: left; font-weight: 600; font-size: 12px; color: #374151; border-bottom: 1px solid #e5e7eb; text-transform: uppercase; letter-spacing: 0.5px; }
+    td { padding: 12px 16px; border-bottom: 1px solid #e5e7eb; }
+    tr:last-child td { border-bottom: none; }
+    .status-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; text-transform: uppercase; }
+    .status-todo { background: #dbeafe; color: #1e40af; }
+    .status-ready { background: #dcfce7; color: #166534; }
+    .status-in-progress { background: #fef08a; color: #713f12; }
+    .status-in-review { background: #fed7aa; color: #92400e; }
+    .status-done { background: #bbf7d0; color: #065f46; }
+    .dev-link { color: #2563eb; text-decoration: none; }
+    .dev-link:hover { text-decoration: underline; }
+    .report-footer { text-align: center; padding: 20px; color: #666; font-size: 12px; margin-top: 40px; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div>
+      <h1>ChatAPC Daily Sprint Report</h1>
+      <div class="date">Thursday, April 2, 2026</div>
+      <div class="subtitle">Development Status & Ticket Overview</div>
+    </div>
+  </header>
+
+  <div class="summary-bar">
+    <div class="summary-card">
+      <div class="number" style="color: #6b7280;">3</div>
+      <div class="label">Todo</div>
+    </div>
+    <div class="summary-card">
+      <div class="number" style="color: #059669;">2</div>
+      <div class="label">Ready</div>
+    </div>
+    <div class="summary-card">
+      <div class="number" style="color: #d97706;">4</div>
+      <div class="label">In Progress</div>
+    </div>
+    <div class="summary-card">
+      <div class="number" style="color: #ea580c;">1</div>
+      <div class="label">In Review</div>
+    </div>
+    <div class="summary-card">
+      <div class="number" style="color: #16a34a;">12</div>
+      <div class="label">Done</div>
+    </div>
+  </div>
+
+  <h2 style="margin-top: 32px; margin-bottom: 16px; color: #1a1a2e;">Recent Sprint Summary</h2>
+  <p style="margin-bottom: 20px; color: #6b7280;">Overview of active development across all teams for the week of April 2, 2026.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Ticket</th>
+        <th>Summary</th>
+        <th>Assignee</th>
+        <th>Status</th>
+        <th>Progress</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>CA-1091</td>
+        <td>Source Code Protection & Docker Image Hardening</td>
+        <td><a href="#" class="dev-link">Marco</a></td>
+        <td><span class="status-badge status-done">Done</span></td>
+        <td>100%</td>
+      </tr>
+      <tr>
+        <td>CA-1092</td>
+        <td>License Management System</td>
+        <td><a href="#" class="dev-link">Momo</a></td>
+        <td><span class="status-badge status-done">Done</span></td>
+        <td>100%</td>
+      </tr>
+      <tr>
+        <td>CA-1101</td>
+        <td>License Module Implementation</td>
+        <td><a href="#" class="dev-link">Marco</a></td>
+        <td><span class="status-badge status-done">Done</span></td>
+        <td>100%</td>
+      </tr>
+      <tr>
+        <td>CA-1102</td>
+        <td>Key Generator CLI Tool</td>
+        <td><a href="#" class="dev-link">Marco</a></td>
+        <td><span class="status-badge status-done">Done</span></td>
+        <td>100%</td>
+      </tr>
+      <tr>
+        <td>CA-1105</td>
+        <td>Unit Testing & Documentation</td>
+        <td><a href="#" class="dev-link">Marco</a></td>
+        <td><span class="status-badge status-done">Done</span></td>
+        <td>100%</td>
+      </tr>
+      <tr>
+        <td>CA-1182</td>
+        <td>Fallback LLM Hallucination</td>
+        <td><a href="#" class="dev-link">Matteo</a></td>
+        <td><span class="status-badge status-done">Done</span></td>
+        <td>100%</td>
+      </tr>
+      <tr>
+        <td>CA-292</td>
+        <td>Message History Pagination</td>
+        <td><a href="#" class="dev-link">Luca</a></td>
+        <td><span class="status-badge status-done">Done</span></td>
+        <td>100%</td>
+      </tr>
+      <tr>
+        <td>CA-303</td>
+        <td>Chat Experience Improvements</td>
+        <td><a href="#" class="dev-link">Luca</a></td>
+        <td><span class="status-badge status-done">Done</span></td>
+        <td>100%</td>
+      </tr>
+      <tr>
+        <td>CA-376</td>
+        <td>Performance Optimization Large Datasets</td>
+        <td><a href="#" class="dev-link">Luca</a></td>
+        <td><span class="status-badge status-in-progress">In Progress</span></td>
+        <td>75%</td>
+      </tr>
+      <tr>
+        <td>CA-391</td>
+        <td>Performance Monitoring Tools</td>
+        <td><a href="#" class="dev-link">Luca</a></td>
+        <td><span class="status-badge status-in-progress">In Progress</span></td>
+        <td>80%</td>
+      </tr>
+      <tr>
+        <td>CA-392</td>
+        <td>Data Decimation Integration</td>
+        <td><a href="#" class="dev-link">Luca</a></td>
+        <td><span class="status-badge status-in-progress">In Progress</span></td>
+        <td>70%</td>
+      </tr>
+      <tr>
+        <td>CA-393</td>
+        <td>DataPyramid Implementation</td>
+        <td><a href="#" class="dev-link">Luca</a></td>
+        <td><span class="status-badge status-in-progress">In Progress</span></td>
+        <td>85%</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2 style="margin-top: 32px; margin-bottom: 16px; color: #1a1a2e;">Team Activity</h2>
+  
+  <h3 style="margin-top: 24px; margin-bottom: 12px; color: #374151; font-size: 16px;">Commits: 52 total</h3>
+  <p style="margin-bottom: 16px; color: #6b7280; font-size: 14px;">
+    Marco: 24 commits | Momo: 6 commits | Luca: 15 commits | Mohamed: 5 commits | Matteo: 1 commit | Filippo P: 1 commit | Giuseppe: 0 commits
+  </p>
+
+  <h3 style="margin-top: 24px; margin-bottom: 12px; color: #374151; font-size: 16px;">Pull Requests: 10 merged, 2 open</h3>
+  <p style="margin-bottom: 16px; color: #6b7280; font-size: 14px;">
+    All major features passing code review and integration testing. Some PRs pending design sign-off from Sabrina.
+  </p>
+
+  <h3 style="margin-top: 24px; margin-bottom: 12px; color: #374151; font-size: 16px;">Blockers & Notes</h3>
+  <ul style="margin-bottom: 16px; color: #6b7280; padding-left: 20px;">
+    <li>Giuseppe: No activity past Mar 27 — may be on research or non-code tasks</li>
+    <li>Mohamed (Hamzahwy): Two PRs awaiting review in admin-panel (Tag hierarchy, Bulk import)</li>
+    <li>Performance optimization suite (CA-391, CA-392, CA-393) on track for merge</li>
+    <li>All licensing and security features completed ahead of schedule</li>
+  </ul>
+
+  <div class="report-footer">
+    Generated 2026-04-02 | ChatAPC Development Team
+  </div>
+</div>
+</body>
+</html>
